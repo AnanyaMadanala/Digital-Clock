@@ -1,69 +1,42 @@
-import java.awt.FlowLayout;
-import java.util.Calendar;
-import javax.swing.JFrame;
-import javax.swing.*;
-import java.awt.*;
-import java.text.SimpleDateFormat;
- 
-public class MyFrame extends JFrame{
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Digital Clock</title>
+    <style>
+        body {
+            background: #0d0d0d;
+            color: #00ff99;
+            font-family: "Courier New", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .clock {
+            font-size: 60px;
+            padding: 20px;
+            border: 2px solid #00ff99;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #00ff99;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock" id="clock">
+        ${currentTime}
+    </div>
 
-Calendar calendar;
-SimpleDateFormat timeFormat;
-SimpleDateFormat dayFormat;
-SimpleDateFormat dateFormat;
-JLabel dateLabel;
-JLabel timeLabel;
-JLabel dayLabel;
-String date;
-String day;
-String time;
-
-MyFrame()
- {
-  this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  this.setTitle("KS// Clock App");
-  this.setLayout(new FlowLayout());
-  this.setSize(450,300);
-  this.setResizable(false);
-
-  timeFormat=new SimpleDateFormat("hh:mm:ss a");
-  dayFormat=new SimpleDateFormat("EEEE");
-  dateFormat=new SimpleDateFormat("MMMMM dd, yyyy");
-  timeLabel =new JLabel();
-  timeLabel.setFont(new Font("Verdana",Font.PLAIN,60));
-  timeLabel.setForeground(Color.red);
-  timeLabel.setBackground(Color.black);
-  timeLabel.setOpaque(true);
-  dayLabel=new JLabel();
-  dayLabel.setFont(new Font("Ink Free",Font.PLAIN,45));
-  dateLabel=new JLabel();
-  dateLabel.setFont(new Font("Ink Free",Font.PLAIN,45));
-  this.add(timeLabel);
-  this.add(dayLabel);
-  this.add(dateLabel);
-
-  this.setVisible(true);
-
-  setTime();
- }
-
- public void setTime(){
-  while(true){
-      time =timeFormat.format(Calendar.getInstance().getTime());
-      timeLabel.setText(time);
-      
-       day =dayFormat.format(Calendar.getInstance().getTime());
-      dayLabel.setText(day);
-      
-      date=dateFormat.format(Calendar.getInstance().getTime());
-      dateLabel.setText(date);
-      
-      try{
-         Thread.sleep(1000);
-         }
-      catch(Exception e){
-           e.printStackTrace();
-          }
-    }
-  }
-}
+    <script>
+        // Refresh clock every second
+        setInterval(() => {
+            fetch("clock")
+                .then(response => response.text())
+                .then(html => {
+                    document.open();
+                    document.write(html);
+                    document.close();
+                });
+        }, 1000);
+    </script>
+</body>
+</html>
